@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Récapitulatif Global CDU{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-4">📊 Récapitulatif Global CDU — Mai 2025</h3>
+
+  <form method="GET" class="row g-3 mb-4">
+  <div class="col-auto">
+    <select name="user" class="form-select">
+      <option value="">👤 Tous les utilisateurs</option>
+      {% for user in utilisateurs %}
+        <option value="{{ user }}" {% if user == selected_user %}selected{% endif %}>{{ user }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-auto">
+    <select name="struct" class="form-select">
+      <option value="">🏢 Toutes les structures</option>
+      {% for struct in structures %}
+        <option value="{{ struct }}" {% if struct == selected_struct %}selected{% endif %}>{{ struct }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">🔍 Filtrer</button>
+  </div>
+</form>
+
+  <!-- Onglets -->
+  <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#bdd">BDD</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reseaux">Réseaux</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#support">Support</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#telecom">Télécom</button></li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- BDD -->
+    <div class="tab-pane fade show active" id="bdd">
+      <h5>Interventions BDD</h5>
+      <table class="table table-bordered table-bdd">
+        <thead><tr><th>Structure</th><th>Utilisateur</th><th>Valeur</th></tr></thead>
+        <tbody>
+        {% for row in data_bdd %}
+        <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>
+            <input type="number" class="form-control" value="{{ row[2] }}"
+                   data-structure="{{ row[0] }}" data-user="{{ row[1] }}" data-type="BDD">
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-success" onclick="enregistrerModifs('BDD')">💾 Enregistrer</button>
+    </div>
+
+    <!-- Réseaux -->
+    <div class="tab-pane fade" id="reseaux">
+      <h5>Interventions Réseaux</h5>
+      <table class="table table-bordered table-reseaux">
+        <thead><tr><th>Structure</th><th>Utilisateur</th><th>Valeur</th></tr></thead>
+        <tbody>
+        {% for row in data_reseaux %}
+        <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>
+            <input type="number" class="form-control" value="{{ row[2] }}"
+                   data-structure="{{ row[0] }}" data-user="{{ row[1] }}" data-type="RESEAUX">
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-success" onclick="enregistrerModifs('RESEAUX')">💾 Enregistrer</button>
+    </div>
+
+    <!-- Support -->
+    <div class="tab-pane fade" id="support">
+      <h5>Interventions Support</h5>
+      <table class="table table-bordered table-support">
+        <thead><tr><th>Structure</th><th>Utilisateur</th><th>Valeur</th></tr></thead>
+        <tbody>
+        {% for row in data_support %}
+        <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>
+            <input type="number" class="form-control" value="{{ row[2] }}"
+                   data-structure="{{ row[0] }}" data-user="{{ row[1] }}" data-type="SUPPORT">
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-success" onclick="enregistrerModifs('SUPPORT')">💾 Enregistrer</button>
+    </div>
+
+    <!-- Télécom -->
+    <div class="tab-pane fade" id="telecom">
+      <h5>Interventions Télécom</h5>
+      <table class="table table-bordered table-telecom">
+        <thead><tr><th>Structure</th><th>Utilisateur</th><th>Valeur</th></tr></thead>
+        <tbody>
+        {% for row in data_telecom %}
+        <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>
+            <input type="number" class="form-control" value="{{ row[2] }}"
+                   data-structure="{{ row[0] }}" data-user="{{ row[1] }}" data-type="TELECOM">
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-success" onclick="enregistrerModifs('TELECOM')">💾 Enregistrer</button>
+    </div>
+  </div>
+
+  <h5 class="mt-5">🔍 Totaux par Structure</h5>
+  <table class="table table-striped">
+    <thead><tr><th>Structure</th><th>Total</th></tr></thead>
+    <tbody>
+    {% for row in data_totaux %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Fonction générique pour enregistrer les modifs d'un type d'intervention
+function enregistrerModifs(typeIntervention) {
+  const modifications = [];
+
+  document.querySelectorAll(`.table-${typeIntervention.toLowerCase()} input[type="number"]`).forEach(input => {
+    const structure = input.getAttribute("data-structure");
+    const user = input.getAttribute("data-user");
+    const valeur = input.value;
+    modifications.push({
+      structure: structure,
+      user: user,
+      type: typeIntervention,
+      valeur: valeur
+    });
+  });
+
+  fetch("/modifier_bulk", {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ modifications: modifications })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert("✅ Modifications enregistrées !");
+    } else {
+      alert("❌ Erreur : " + data.error);
+    }
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDU GL1Z - Remplissage INF - Sonatrach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Sonatrach Theme Variables */
+        :root {
+            --sonatrach-orange: #d37434;
+            --sonatrach-dark-orange: #d37434;
+            --sonatrach-light-orange: #d37434;
+            --sonatrach-hover: #d37434;
+            --text-dark: #2C3E50;
+            --text-light: #6C757D;
+            --text-muted: #95A5A6;
+            --success-green: #27AE60;
+            --warning-yellow: #F39C12;
+            --danger-red: #E74C3C;
+            --light-bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --border-color: #E9ECEF;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(227, 148, 30, 0.12);
+            --shadow-lg: 0 8px 25px rgba(227, 148, 30, 0.15);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* Enhanced Header */
+        .header {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sonatrach-orange);
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .app-title {
+            font-size: 2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.02em;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+    
+
+        .recap-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .profile-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Profile Panel */
+        .profile-panel {
+            position: absolute;
+            top: 100%;
+            right: 2rem;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            min-width: 200px;
+            z-index: 1000;
+            transform: translateY(-10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+  opacity: 1;
+}
+.alert-success {
+  background-color: #27AE60;
+}
+.alert-error {
+  background-color: #E74C3C;
+}
+.alert-warning {
+  background-color: #F39C12;
+}
+        .profile-panel.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-panel::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 20px;
+            width: 16px;
+            height: 16px;
+            background: var(--card-bg);
+            transform: rotate(45deg);
+            border-top: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--sonatrach-orange), var(--sonatrach-light-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .user-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, var(--sonatrach-orange), var(--sonatrach-dark-orange));
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+
+        /* Enhanced Card Design */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--sonatrach-orange), var(--sonatrach-dark-orange));
+            color: white;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+ .flash-container {
+            margin: 1em auto;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .flash-message {
+            padding: 12px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .flash-message.success { background-color: #27ae60; }
+        .flash-message.error { background-color: #c0392b; }
+        .flash-message.warning { background-color: #f39c12; }
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--sonatrach-light-orange), var(--sonatrach-hover));
+        }
+
+        .card-header i {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        /* Enhanced Structures Grid */
+        .structures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .structure-item {
+            background: linear-gradient(145deg, #FFFFFF, #F8F9FA);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .structure-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--sonatrach-orange), var(--sonatrach-light-orange));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .structure-item:hover {
+            background: linear-gradient(145deg, #FFFFFF, rgba(227, 148, 30, 0.03));
+            border-color: var(--sonatrach-light-orange);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .structure-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .structure-item.active {
+            background: linear-gradient(145deg, rgba(227, 148, 30, 0.05), rgba(227, 148, 30, 0.08));
+            border-color: var(--sonatrach-orange);
+        }
+
+        .structure-item.active::before {
+            transform: scaleX(1);
+        }
+
+        .structure-name {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        .structure-input {
+            width: 70px;
+            padding: 0.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            text-align: center;
+            transition: var(--transition);
+            font-weight: 600;
+            background: white;
+        }
+
+        .structure-input:focus {
+            outline: none;
+            border-color: var(--sonatrach-orange);
+            box-shadow: 0 0 0 3px rgba(227, 148, 30, 0.1);
+            background: #FEFEFE;
+        }
+
+        .structure-input:valid:not([value="0"]) {
+            border-color: var(--success-green);
+            background: rgba(39, 174, 96, 0.05);
+        }
+
+        /* Enhanced Form Design */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .form-label i {
+            color: var(--sonatrach-orange);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--sonatrach-orange);
+            box-shadow: 0 0 0 3px rgba(227, 148, 30, 0.1);
+        }
+
+        .form-control:valid {
+            border-color: var(--success-green);
+        }
+
+        .textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        /* Enhanced Button */
+        .save-btn {
+            background: linear-gradient(135deg, var(--sonatrach-orange), var(--sonatrach-dark-orange));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            justify-content: center;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .save-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .save-btn:hover::before {
+            left: 100%;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .status-badge.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+
+        /* Bottom Navigation - Enhanced */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 99;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--sonatrach-orange), var(--sonatrach-dark-orange));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-btn.secondary {
+            background: linear-gradient(135deg, #6C757D, #5A6268);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 1rem;
+                margin: 1.5rem auto;
+            }
+
+            .structures-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                gap: 0.5rem;
+            }
+
+            .recap-btn, .profile-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .structures-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Smooth Animations */
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem; /* espace horizontal entre les boutons */
+}
+
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+    <!-- Enhanced Header -->
+    <header class="header">
+        <div class="logo-section">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='assets/images/logo_sonatrach.png') }}" alt="Sonatrach" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <i class="fas fa-industry" style="display: none;"></i>
+                </div>
+                <h1 class="app-title">CDU GL1Z</h1>
+            </div>
+        </div>
+
+        
+          <div class="profile-actions">
+            <button class="profile-btn" onclick="window.location.href='/recap_global'">
+    <i class="fas fa-chart-bar"></i>
+    Récap Global
+</button>
+ <button class="profile-btn" onclick="toggleProfile()">
+                <i class="fas fa-user-circle"></i>
+                Profile
+            </button>
+         </div>
+           
+
+        <!-- Enhanced Profile Panel -->
+        <div class="profile-panel" id="profilePanel">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <h4 id="userName">Utilisateur</h4>
+                    <p id="userId">INF001</p>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Déconnexion
+            </button>
+        </div>
+    </header>
+
+    <form id="dataForm" method="POST" action="{{ url_for('inf.submit_inf') }}">
+        <!-- Main Container -->
+        <div class="main-container fade-in">
+            <!-- Enhanced Structures Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-building"></i>
+                    <span class="card-title">Structures et Interventions</span>
+                </div>
+                <div class="card-content">
+                    <div class="structures-grid">
+                        <div class="structure-item">
+                            <div class="structure-name">ADM</div>
+                           
+                            <input type="number" class="structure-input" name="structure_ADM" value="{{ existing_values.get('ADM', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">APP</div>
+                            
+                            <input type="number" class="structure-input" name="structure_APP" value="{{ existing_values.get('APP', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">D</div>
+                           
+                             <input type="number" class="structure-input" name="structure_D" value="{{ existing_values.get('D', 0) }}" min="0" placeholder="0">
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">EXP</div>
+                           
+             <input type="number" class="structure-input" name="structure_EXP" value="{{ existing_values.get('EXP', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">GPR</div>
+                         
+             <input type="number" class="structure-input" name="structure_GPR" value="{{ existing_values.get('GPR', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">RHU</div>
+
+                     
+                     <input type="number" class="structure-input" name="structure_RHU" value="{{ existing_values.get('RHU', 0) }}" min="0" placeholder="0">
+
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">FIN</div>
+                            
+                  <input type="number" class="structure-input" name="structure_FIN" value="{{ existing_values.get('FIN', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">MNT</div>
+                         
+                            <input type="number" class="structure-input" name="structure_MNT" value="{{ existing_values.get('MNT', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">HSE</div>
+
+                        <input type="number" class="structure-input" name="structure_HSE" value="{{ existing_values.get('HSE', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">INP</div>
+                       
+                              <input type="number" class="structure-input" name="structure_INP" value="{{ existing_values.get('INP', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">JUR</div>
+                          
+            <input type="number" class="structure-input" name="structure_JUR" value="{{ existing_values.get('INP', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">MOG</div>
+                         <input type="number" class="structure-input" name="structure_MOG" value="{{ existing_values.get('MOG', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">PROD</div>
+                            <input type="number" class="structure-input" name="structure_PROD" value="{{ existing_values.get('PROD', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">RT</div>
+                           <input type="number" class="structure-input" name="structure_RT" value="{{ existing_values.get('RT', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">SIE</div>
+                            <input type="number" class="structure-input" name="structure_SIE" value="{{ existing_values.get('SIE', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">SIG</div>
+                           <input type="number" class="structure-input" name="structure_SIG" value="{{ existing_values.get('SIG', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">TEC</div>
+                           <input type="number" class="structure-input" name="structure_TEC" value="{{ existing_values.get('TEC', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">TNF</div>
+                            <input type="number" class="structure-input" name="structure_TNF" value="{{ existing_values.get('TNF', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">MCHE</div>
+                          <input type="number" class="structure-input" name="structure_MCHE" value="{{ existing_values.get('MCHE', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                        <div class="structure-item">
+                            <div class="structure-name">PIPING</div>
+                           <input type="number" class="structure-input" name="structure_PIPING" value="{{ existing_values.get('PIPING', 0) }}" min="0" placeholder="0">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Form Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-edit"></i>
+                    <span class="card-title">Saisie des Données</span>
+                </div>
+                <div class="card-content">
+                    <!-- ID Utilisateur -->
+                    <div class="form-group">
+                        <label for="iduser" class="form-label">
+                            <i class="fas fa-user"></i>
+                            ID UTILISATEUR
+                        </label>
+                        <input type="text" name="iduser" id="iduser" class="form-control" 
+                               value="{{ username }}" readonly>
+                    </div>
+
+                    
+                    
+                 
+                    
+                    <!-- Type d'intervention -->
+                    <div class="form-group">
+                        <label for="typeIntervention" class="form-label">
+                            <i class="fas fa-cog"></i>
+                            Type d'intervention
+                        </label>
+                        <select class="form-control" id="typeIntervention" name="type_intervention" required>
+                            <option value="">Sélectionnez un type...</option>
+                            <option value="Support">Support</option>
+                            <option value="Telecom">Telecom</option>
+                            <option value="BDD">Base de données</option>
+                            <option value="RESEAUX">Réseau</option>
+                        </select>
+                    </div>
+
+                    <!-- Observation -->
+                    <div class="form-group">
+                        <label for="observ" class="form-label">
+                            <i class="fas fa-comment-alt"></i>
+                            Observation
+                            <span class="status-badge success">
+                                <i class="fas fa-check-circle"></i>
+                                MODIFIABLE
+                            </span>
+                        </label>
+                        <textarea class="form-control textarea" 
+                                id="observ" 
+                                name="observ" 
+                                rows="4"
+                                placeholder="Saisissez vos observations détaillées..."></textarea>
+                    </div>
+
+                    <button type="submit" class="save-btn">
+                        <i class="fas fa-save"></i>
+                        Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Enhanced Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-buttons">
+            <a href="home.html" class="nav-btn">
+                <i class="fas fa-home"></i>
+                Accueil
+            </a>
+            <a href="settings.html" class="nav-btn secondary">
+                <i class="fas fa-cog"></i>
+                Paramètres
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Enhanced JavaScript functionality
+        function toggleProfile() {
+            const panel = document.getElementById('profilePanel');
+            panel.classList.toggle('active');
+        }
+
+        // Close profile panel when clicking outside
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('profilePanel');
+            const profileBtn = document.querySelector('.profile-btn');
+            
+            if (!panel.contains(e.target) && !profileBtn.contains(e.target)) {
+                panel.classList.remove('active');
+            }
+        });
+
+        // Enhanced logout functionality
+        function logout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                // Add loading state
+                const logoutBtn = document.querySelector('.logout-btn');
+                logoutBtn.classList.add('loading');
+                logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Déconnexion...';
+                
+                setTimeout(() => {
+                    alert('Déconnexion réussie');
+                    // Redirect to login page
+                    // window.location.href = '/login';
+                }, 1500);
+            }
+        }
+
+        // Enhanced form submission
+       /* document.getElementById('dataForm').addEventListener('submit', function(e) {
+          //  e.preventDefault();
+            
+            const typeIntervention = document.getElementById('typeIntervention').value.trim();
+            const idUser = document.getElementById('iduser').value.trim();
+            
+            // Validation
+            if (!typeIntervention) {
+                showNotification('Veuillez sélectionner le type d\'intervention.', 'error');
+                document.getElementById('typeIntervention').focus();
+                return;
+            }
+            
+            if (!idUser) {
+                showNotification('Veuillez saisir votre identifiant utilisateur.', 'error');
+                document.getElementById('iduser').focus();
+                return;
+            }
+
+            // Check structure values
+            const structureInputs = document.querySelectorAll('input[name^="structure_"]');
+            let hasValues = false;
+            
+            structureInputs.forEach(input => {
+                if (parseInt(input.value) > 0) {
+                    hasValues = true;
+                }
+            });
+            
+            if (!hasValues) {
+                showNotification('Veuillez saisir au moins une valeur supérieure à 0 pour une structure.', 'warning');
+                return;
+            }
+            
+            // Submit with loading state
+            const submitBtn = document.querySelector('.save-btn');
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('Données enregistrées avec succès !', 'success');
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+                
+                // Optional: Reset form or redirect
+                 document.getElementById('dataForm').reset();
+            }, 2000);
+        });
+*/
+
+document.getElementById('dataForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const typeIntervention = document.getElementById('typeIntervention').value.trim();
+    const idUser = document.getElementById('iduser').value.trim();
+
+    if (!typeIntervention) {
+        showNotification('Veuillez sélectionner le type d\'intervention.', 'error');
+        document.getElementById('typeIntervention').focus();
+        return;
+    }
+
+    if (!idUser) {
+        showNotification('Veuillez saisir votre identifiant utilisateur.', 'error');
+        document.getElementById('iduser').focus();
+        return;
+    }
+
+    const structureInputs = document.querySelectorAll('input[name^="structure_"]');
+    let hasValues = false;
+
+    structureInputs.forEach(input => {
+        if (parseInt(input.value) > 0) {
+            hasValues = true;
+        }
+    });
+
+    if (!hasValues) {
+        showNotification('Veuillez saisir au moins une valeur supérieure à 0 pour une structure.', 'warning');
+        return;
+    }
+
+    // Bouton spinner
+    const submitBtn = document.querySelector('.save-btn');
+    const originalHTML = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+    submitBtn.disabled = true;
+
+    // Soumission réelle du formulaire
+    setTimeout(() => {
+        document.getElementById('dataForm').submit();  // Repost
+    }, 500);  // court délai pour montrer le spinner
+});
+        // Enhanced input interactions
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('structure-input')) {
+                const structureItem = e.target.parentElement;
+                const value = parseInt(e.target.value);
+                
+                if (value > 0) {
+                    structureItem.classList.add('active');
+                    e.target.style.borderColor = '#27AE60';
+                } else {
+                    structureItem.classList.remove('active');
+                    e.target.style.borderColor = '#E9ECEF';
+                }
+            }
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            // Set background color based on type
+            const colors = {
+                success: '#27AE60',
+                error: '#E74C3C',
+                warning: '#F39C12',
+                info: '#3498DB'
+            };
+            notification.style.backgroundColor = colors[type] || colors.info;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize user data
+        /*function initializeUser() {
+            const userId = '' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            const userName = 'User INF';
+            
+            document.getElementById('userId').textContent = userId;
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userAvatar').textContent = userName.charAt(0);
+            document.getElementById('iduser').value = userId;
+        }*/
+
+        // Initialize animations and data
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUser();
+            
+            // Animate elements
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                }, index * 100);
+            });
+            
+            // Initialize structure items hover effects
+            document.querySelectorAll('.structure-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.02)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Enter to submit
+            if (e.ctrlKey && e.key === 'Enter') {
+                document.getElementById('dataForm').dispatchEvent(new Event('submit'));
+            }
+            
+            // Escape to close profile
+            if (e.key === 'Escape') {
+                document.getElementById('profilePanel').classList.remove('active');
+
+        
+            }
+
+            
+        });
+        window.addEventListener('DOMContentLoaded', () => {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+      setTimeout(() => {
+        alert.style.transition = 'opacity 0.5s ease-out';
+        alert.style.opacity = '0';
+        setTimeout(() => {
+          alert.remove();
+        }, 500); // Attendre la fin de la transition
+      }, 4000); // Délai avant disparition (4 sec)
+    });
+  });
+    </script>
+</body>
+</html>

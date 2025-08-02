@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Informations - CDU GLIZ - Chef de Service</title>
+    <meta name="description" content="Interface de validation des données pour le Chef de Service du département INF - Sonatrach CDU GLIZ">
+    <!-- Feather Icons CDN -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* Sonatrach Corporate Styles - InfServ Version */
+        :root {
+            --sonatrach-orange: #e67e22;
+            --sonatrach-dark-orange: #d35400;
+            --sonatrach-light-orange: #f39c12;
+            --corporate-blue: #3498db;
+            --corporate-dark-blue: #2980b9;
+            --corporate-gray: #7f8c8d;
+            --success-green: #27ae60;
+            --warning-yellow: #f1c40f;
+            --danger-red: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --bg-light: #f8f9fa;
+            --bg-dark: #34495e;
+            --white: #ffffff;
+            --border-light: #e1e8ed;
+            --border-dark: #bdc3c7;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
+            --shadow-active: 0 4px 12px rgba(0,0,0,0.2);
+            --border-radius: 12px;
+            --border-radius-small: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.15s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+       .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sonatrach-orange);
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+        }
+        .brand-title {
+            color: var(--white);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 24px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .title-icon {
+            width: 42px;
+            height: 42px;
+            color: var(--sonatrach-orange);
+        }
+
+        .page-subtitle {
+            color: var(--corporate-gray);
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: var(--white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--corporate-blue) 0%, var(--corporate-dark-blue) 100%);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-green) 0%, #229954 100%);
+            color: var(--white);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-red) 0%, #c0392b 100%);
+            color: var(--white);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-filter {
+            background: linear-gradient(135deg, var(--corporate-blue) 0%, var(--corporate-dark-blue) 100%);
+            color: var(--white);
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Loading */
+        .loading-section {
+            margin-bottom: 32px;
+            animation: fadeIn 0.3s ease;
+            display: none;
+        }
+
+        .loading-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            padding: 24px;
+        }
+
+        .loading-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--sonatrach-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Notifications */
+        .notification-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 10000;
+            max-width: 400px;
+        }
+
+        .notification {
+            background: var(--white);
+            border-radius: var(--border-radius-small);
+            box-shadow: var(--shadow-hover);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-green);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-red);
+        }
+
+        .notification.info {
+            border-left-color: var(--corporate-blue);
+        }
+
+        .notification-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .notification.success .notification-icon {
+            color: var(--success-green);
+        }
+
+        .notification.error .notification-icon {
+            color: var(--danger-red);
+        }
+
+        .notification.info .notification-icon {
+            color: var(--corporate-blue);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--corporate-gray);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--corporate-gray);
+            transition: var(--transition-fast);
+        }
+
+        .notification-close:hover {
+            color: var(--text-dark);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.stat-card {
+  text-align: center;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px solid #e1e8ed;
+}
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            margin-bottom: 20px;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: var(--white);
+            padding: 16px 20px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .card-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .card-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        /* Statistics Grid */
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: var(--border-radius-small);
+            border: 2px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--sonatrach-orange);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--sonatrach-orange);
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--corporate-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 0;
+            background: var(--bg-light);
+            border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+            padding: 4px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--corporate-gray);
+            transition: var(--transition);
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        .tab-button.active {
+            background: var(--sonatrach-orange);
+            color: var(--white);
+        }
+
+        .tab-button:hover:not(.active) {
+            background: rgba(230, 126, 34, 0.1);
+            color: var(--sonatrach-orange);
+        }
+
+        /* Filters */
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 16px;
+            align-items: end;
+        }
+
+        /* Layout Grid for Filter and Statistics */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .filter-select {
+            background: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius-small);
+            padding: 10px 14px;
+            font-size: 14px;
+            color: var(--text-dark);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--sonatrach-orange);
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .filter-select:hover {
+            border-color: var(--sonatrach-orange);
+        }
+
+        /* Table Toggle */
+        .table-toggle {
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .toggle-buttons {
+            display: inline-flex;
+            background: var(--bg-light);
+            border-radius: var(--border-radius-small);
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--corporate-gray);
+            transition: var(--transition);
+        }
+
+        .toggle-btn.active {
+            background: var(--sonatrach-orange);
+            color: var(--white);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: rgba(230, 126, 34, 0.1);
+            color: var(--sonatrach-orange);
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            display: none;
+        }
+
+        .table-container.active {
+            display: block;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: var(--white);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .table-header-left {
+            flex: 1;
+        }
+
+        .table-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 6px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .validation-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .validation-buttons .btn {
+            min-width: 120px;
+            padding: 12px 24px;
+            font-size: 14px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table thead {
+            background: var(--bg-light);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .data-table th {
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition-fast);
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(230, 126, 34, 0.05);
+        }
+
+        .data-table td {
+            padding: 14px 18px;
+            color: var(--text-dark);
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 60px 40px;
+            text-align: center;
+            color: var(--corporate-gray);
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .empty-state-message {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 16px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-buttons {
+                justify-content: center;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .validation-buttons {
+                justify-content: center;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px 12px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .category-tabs {
+                flex-wrap: wrap;
+            }
+
+            .layout-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .statistics-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .stat-item {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+        }
+        .logo-container {
+    width: 120px; /* or preferred width */
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-container img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo-container">
+    <img src="{{ url_for('static', filename='assets/images/blacklogo.svg.png') }}" alt="Sonatrach" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <i class="fas fa-industry" style="display: none;"></i>
+</div>
+
+                <h1 class="brand-title">Service INF - Chef de Service</h1>
+            </div>
+            <div class="nav-actions">
+                <a href="inf.html" class="nav-btn">
+                    <i data-feather="arrow-left" class="nav-icon"></i>
+                    Retour
+                </a>
+                <button onclick="logout()" class="nav-btn">
+                    <i data-feather="log-out" class="nav-icon"></i>
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h3 class="page-title">
+                        <i data-feather="check-circle" class="title-icon"></i>
+                        Validation des Données
+                    </h3>
+                   
+                </div>
+                <div class="action-buttons">
+                    <button onclick="validateAll()" class="btn btn-success">
+                        <i data-feather="check-circle" class="btn-icon"></i>
+                        Valider Tout
+                    </button>
+                    <button onclick="generatePPTX()" class="btn btn-primary">
+                        <i data-feather="file-text" class="btn-icon"></i>
+                        Générer PPTX
+                    </button>
+                    <button onclick="refreshData()" class="btn btn-secondary">
+                        <i data-feather="refresh-cw" class="btn-icon"></i>
+                        Actualiser
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Loading Section -->
+        <div class="loading-section" id="loadingSection">
+            <div class="loading-card">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <span class="loading-text">Chargement des données...</span>
+                </div>
+            </div>
+        </div>
+<div class="layout-grid">
+
+  <!-- Card Filtre -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <i data-feather="filter" class="card-icon"></i>
+        Filtres de Données
+      </div>
+      <div class="card-subtitle">Filtrer les données par utilisateur, période et structure</div>
+    </div>
+
+    <div class="card-content">
+      <form method="get" action="/inf/recap_global">
+        <div class="filters">
+          <!-- Filtre Utilisateur -->
+          <div class="filter-group">
+            <label class="filter-label">Utilisateur:</label>
+            <select class="filter-select" name="user">
+              <option value="">Tous les utilisateurs</option>
+              {% for user in users %}
+                <option value="{{ user }}" {% if user == selected_user %}selected{% endif %}>{{ user }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Filtre Période -->
+          <div class="filter-group">
+            <label class="filter-label">Période:</label>
+            <select class="filter-select" name="periode">
+              <option value="">Toutes les périodes</option>
+              {% for p in periodes %}
+                <option value="{{ p }}" {% if p == selected_periode %}selected{% endif %}>{{ p }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Filtre Structure -->
+          <div class="filter-group">
+            <label class="filter-label">Structure:</label>
+            <select class="filter-select" name="struct">
+              <option value="">Toutes les structures</option>
+              {% for struct in structures %}
+                <option value="{{ struct }}" {% if struct == selected_struct %}selected{% endif %}>{{ struct }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Bouton Appliquer -->
+          <div class="filter-group">
+            <button type="submit" class="btn btn-secondary">
+              <i data-feather="search" class="btn-icon"></i>
+              Appliquer
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Card Statistiques -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <i data-feather="bar-chart-2" class="card-icon"></i>
+        Statistiques
+      </div>
+      <div class="card-subtitle">Résumé des validations</div>
+    </div>
+    <div class="card-content">
+      <div class="statistics-grid">
+       <div class="stat-item">
+  <div class="stat-value" id="totalRecords">{{ total_inf }}</div>
+  <div class="stat-label">Total INF</div>
+</div>
+
+<div class="stat-item">
+  <div class="stat-value" id="validatedRecords">{{ total_tel }}</div>
+  <div class="stat-label">Total TEL</div>
+</div>
+
+          <div class="stat-item">
+          <div class="stat-value" id="validatedRecords">En attente </div>
+          <div class="stat-label">état</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+        <!-- Table Toggle -->
+        <div class="table-toggle">
+            <div class="toggle-buttons">
+                <button class="toggle-btn active" onclick="switchTable('validation')">
+                    <i data-feather="check-circle" style="width: 16px; height: 16px; margin-right: 8px;"></i>
+                    Validation des Données
+                </button>
+                <button class="toggle-btn" onclick="switchTable('summary')">
+                    <i data-feather="pie-chart" style="width: 16px; height: 16px; margin-right: 8px;"></i>
+                    Résumé par Structure
+                </button>
+            </div>
+        </div>
+
+        <!-- Validation Table -->
+        <div class="table-container active" id="validationTable">
+            <div class="table-header">
+                <div class="table-header-left">
+                    <div class="table-title">
+                        <i data-feather="check-circle" class="table-icon"></i>
+                        Validation des Données
+                    </div>
+                    <div class="table-subtitle">Vérification et validation des saisies utilisateur</div>
+                </div>
+                
+            </div>
+
+         <div class="category-tabs">
+  <a href="{{ url_for('inf.recap_global', type_intervention='', user=selected_user, struct=selected_struct, periode=periode) }}" class="tab-button {% if not selected_type_intervention %}active{% endif %}">Toutes les données</a>
+
+  <a href="{{ url_for('inf.recap_global', type_intervention='SUPPORT', user=selected_user, struct=selected_struct, periode=periode) }}" class="tab-button {% if selected_type_intervention == 'SUPPORT' %}active{% endif %}">Support</a>
+
+  <a href="{{ url_for('inf.recap_global', type_intervention='BDD', user=selected_user, struct=selected_struct, periode=periode) }}" class="tab-button {% if selected_type_intervention == 'BDD' %}active{% endif %}">BDD</a>
+
+  <a href="{{ url_for('inf.recap_global', type_intervention='RESEAUX', user=selected_user, struct=selected_struct, periode=periode) }}" class="tab-button {% if selected_type_intervention == 'RESEAUX' %}active{% endif %}">Réseau</a>
+
+  <a href="{{ url_for('inf.recap_global', type_intervention='TELECOM', user=selected_user, struct=selected_struct, periode=periode) }}" class="tab-button {% if selected_type_intervention == 'TELECOM' %}active{% endif %}">Télécom</a>
+</div>
+
+
+            
+            <div class="table-content" id="tableContent">
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>  Utilisateur
+                                
+                                <i data-feather="chevron-down" style="width: 14px; height: 14px; margin-left: 8px; opacity: 0.6;"></i>
+                            </th>
+                            <th>Structure
+                              
+                                <i data-feather="chevron-down" style="width: 14px; height: 14px; margin-left: 8px; opacity: 0.6;"></i>
+                            </th>
+                            <th>
+                                Catégorie
+                                <i data-feather="chevron-down" style="width: 14px; height: 14px; margin-left: 8px; opacity: 0.6;"></i>
+                            </th>
+                            <th>
+                                Description
+                                <i data-feather="chevron-down" style="width: 14px; height: 14px; margin-left: 8px; opacity: 0.6;"></i>
+                            </th>
+                            <th>
+                                Date
+                                <i data-feather="chevron-down" style="width: 14px; height: 14px; margin-left: 8px; opacity: 0.6;"></i>
+                            </th>
+                           <th>
+  Valeur
+  <i data-feather="chevron-down" style="width: 14px; height: 14px; margin-left: 8px; opacity: 0.6;"></i>
+</th>
+                        </tr>
+            <tbody id="tableBody">
+  {% if data_all %}
+    {% for row in data_all %}
+      <tr>
+        <td>{{ row[1] }}</td> <!-- IDUSER -->
+        <td>{{ row[0] }}</td> <!-- STRUCT -->
+        <td>{{ row[2] }}</td> <!-- TYPE_INTERVENTION -->
+        <td>{{ row[4] }}</td> <!-- OBSERV -->
+        <td>{{ row[5] }}</td> <!-- PERIODE -->
+        <td>{{ row[3] }}</td> <!-- VALEUR -->
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="6" style="text-align:center;">Aucune donnée trouvée pour la période {{ periode }}</td>
+    </tr>
+  {% endif %}
+</tbody>
+
+                </table>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i data-feather="inbox" class="empty-state-icon"></i>
+                    <h3 class="empty-state-title">Aucune donnée disponible</h3>
+                    <p class="empty-state-message">
+                        Il n'y a actuellement aucune donnée à valider pour les critères sélectionnés.
+                        <br>Veuillez vérifier vos filtres ou attendre que de nouvelles données soient soumises.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Table -->
+        <div class="table-container" id="summaryTable">
+            <div class="table-header">
+                <div class="table-header-left">
+                    <div class="table-title">
+                        <i data-feather="pie-chart" class="table-icon"></i>
+                        Résumé par Structure
+                    </div>
+                    <div class="table-subtitle">Total des interventions par département</div>
+                </div>
+            </div>
+            
+            <div class="table-content">
+                <table class="data-table" id="summaryDataTable">
+                    <thead>
+                        <tr>
+                            <th>Structure</th>
+                            <th>Total Interventions</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+  {% if summary_data %}
+    {% for s in summary_data %}
+      <tr>
+        <td>{{ s[0] }}</td> <!-- STRUCT -->
+        <td>{{ s[1] }}</td> <!-- TOTAL interventions -->
+        <td>-</td> <!-- En attente (adapter si tu l’as dans la BDD) -->
+        <td>-</td> <!-- Validées (adapter si tu l’as dans la BDD) -->
+        <td>-</td> <!-- Pourcentage (calculable si tu souhaites) -->
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="5" style="text-align:center;">Aucune donnée disponible pour le résumé</td>
+    </tr>
+  {% endif %}
+</tbody>
+                </table>
+                
+                <!-- Empty State for Summary -->
+                <div class="empty-state" id="summaryEmptyState" style="display: none;">
+                    <i data-feather="pie-chart" class="empty-state-icon"></i>
+                    <h3 class="empty-state-title">Aucune donnée disponible</h3>
+                    <p class="empty-state-message">
+                        Il n'y a actuellement aucune donnée pour générer le résumé par structure.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script>
+        // Global variables
+       
+        let currentCategory = 'all';
+        let currentTable = 'validation';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Feather Icons after DOM is loaded
+            setTimeout(() => {
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                }
+            }, 100);
+           // loadUserData();
+        });
+
+      
+       document.addEventListener('DOMContentLoaded', function() {
+  const userFilter = document.querySelector('select[name="user"]');
+  const periodeFilter = document.querySelector('select[name="periode"]');
+
+  function updateTotals() {
+    const selectedUser = userFilter.value;
+    const selectedPeriode = periodeFilter ? periodeFilter.value : '05/2025';
+
+    fetch(`/inf/api/recap_totaux?user=${selectedUser}&periode=${selectedPeriode}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          console.error('Erreur:', data.error);
+          return;
+        }
+        document.getElementById('totalRecords').textContent = data.total_inf;
+        document.getElementById('validatedRecords').textContent = data.total_tel;
+      })
+      .catch(error => console.error('Erreur fetch:', error));
+  }
+
+  if (userFilter) {
+    userFilter.addEventListener('change', updateTotals);
+  }
+});
+
+
+        // Switch between tables
+        function switchTable(tableType) {
+            currentTable = tableType;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide tables
+            document.querySelectorAll('.table-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            if (tableType === 'validation') {
+                document.getElementById('validationTable').classList.add('active');
+            } else {
+                document.getElementById('summaryTable').classList.add('active');
+            }
+            
+            // Refresh icons
+            setTimeout(() => {
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                }
+            }, 100);
+        }
+
+        // Switch category tabs
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('.tab-button').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            applyFilters();
+        }
+
+        
+
+        // Update summary table by structure
+       
+        // Update table with filtered data
+       
+
+        // Update statistics display
+       
+        // Show empty state
+        
+        // Show/hide loading
+        function showLoading(show) {
+            const loadingSection = document.getElementById('loadingSection');
+            loadingSection.style.display = show ? 'block' : 'none';
+        }
+
+        // Validate all data
+        async function validateAll() {
+            if (filteredData.length === 0) {
+                showNotification('info', 'Aucune donnée', 'Il n\'y a aucune donnée à valider.');
+                return;
+            }
+
+            if (!confirm('Êtes-vous sûr de vouloir valider toutes les données affichées ?')) {
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch('/api/inf/validate-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        users: filteredData.map(item => item.username),
+                        category: currentCategory
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification('success', 'Validation réussie', 'Toutes les données ont été validées avec succès.');
+                    loadUserData(); // Reload data
+                } else {
+                    throw new Error('Backend API not available');
+                }
+            } catch (error) {
+                console.log('Backend not connected, simulating validation');
+                showNotification('success', 'Validation simulée', `${filteredData.length} enregistrements validés en mode démo.`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Reject all data
+        async function rejectAll() {
+            if (filteredData.length === 0) {
+                showNotification('info', 'Aucune donnée', 'Il n\'y a aucune donnée à rejeter.');
+                return;
+            }
+
+            if (!confirm('Êtes-vous sûr de vouloir rejeter toutes les données affichées ?')) {
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch('/api/inf/reject-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        users: filteredData.map(item => item.username),
+                        category: currentCategory
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification('success', 'Rejet réussi', 'Toutes les données ont été rejetées avec succès.');
+                    loadUserData(); // Reload data
+                } else {
+                    throw new Error('Backend API not available');
+                }
+            } catch (error) {
+                console.log('Backend not connected, simulating rejection');
+                showNotification('success', 'Rejet simulé', `${filteredData.length} enregistrements rejetés en mode démo.`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+       
+       
+           
+
+               
+
+        // Refresh data
+        function refreshData() {
+            loadUserData();
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Show notification
+        function showNotification(type, title, message) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let iconName = 'info';
+            if (type === 'success') iconName = 'check-circle';
+            if (type === 'error') iconName = 'alert-circle';
+            
+            notification.innerHTML = `
+                <i data-feather="${iconName}" class="notification-icon"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i data-feather="x"></i>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            setTimeout(() => {
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                }
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

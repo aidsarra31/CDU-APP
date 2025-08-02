@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Director Dashboard - Sonatrach Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6600;
+            --secondary-blue: #003366;
+            --light-orange: #FFF5F0;
+            --dark-orange: #B34700;
+            --success-green: #66CC66;
+            --error-red: #E53E3E;
+            --background: #F5F7FA;
+            --surface: #FFFFFF;
+            --text-primary: #2D3748;
+            --text-secondary: #718096;
+            --border: #E2E8F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--background);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+            color: white;
+            padding: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            background: white;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            font-size: 1.5rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left-color: white;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background-color: var(--background);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            color: var(--primary-orange);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .dashboard-actions {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .global-export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, #001a33 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .global-export-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .departments-status h2 {
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .status-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-header h3 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+        }
+
+        .status-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-indicator.implemented {
+            background-color: var(--success-green);
+            color: white;
+        }
+
+        .status-indicator.not_implemented {
+            background-color: var(--error-red);
+            color: white;
+        }
+
+        .status-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .status-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .export-btn:hover:not(.disabled) {
+            transform: translateY(-2px);
+        }
+
+        .export-btn.disabled {
+            background: var(--text-secondary);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .dashboard-summary h2 {
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-orange);
+        }
+
+        .stat-info h3 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-oil-well"></i>
+                </div>
+                <h2>Portal</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a onclick="navigateTo('departments.html')"><i class="fas fa-building"></i> Département</a></li>
+                <li><a onclick="navigateTo('settings.html')"><i class="fas fa-cog"></i> Paramètres</a></li>
+                <li><a onclick="navigateTo('security.html')"><i class="fas fa-lock"></i> Sécurité</a></li>
+                <li><a onclick="navigateTo('documents.html')"><i class="fas fa-file-alt"></i> Documents personnels</a></li>
+                <li><a onclick="navigateTo('history.html')"><i class="fas fa-history"></i> Historique d'activités</a></li>
+                <li><a class="active" onclick="navigateTo('director-dashboard.html')"><i class="fas fa-tachometer-alt"></i> Director Dashboard</a></li>
+                <li><a onclick="navigateTo('login.html')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="director-dashboard">
+                <div class="page-header">
+                    <h1>Director Dashboard</h1>
+                    <p>Department Status Overview and Report Generation</p>
+                </div>
+                
+                <div class="dashboard-actions">
+                    <button class="global-export-btn" onclick="exportGlobalReport()">
+                        <i class="fas fa-file-powerpoint"></i>
+                        Export Global Report (All Departments)
+                    </button>
+                </div>
+                 <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        function exportDepartmentReport(dept) {
+            alert(`Generating PowerPoint report for ${dept} department...`);
+            // In a real application, this would trigger a download
+        }
+
+        function exportGlobalReport() {
+            alert('Generating global PowerPoint report for all departments...');
+            // In a real application, this would trigger a download
+        }
+    </script>
+                <div class="departments-status">
+                    <h2>Department Status</h2>
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>INF</h3>
+                                <div class="status-indicator implemented">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">Data Implemented</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn" onclick="exportDepartmentReport('INF')">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>ADM</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>APP</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>FIN</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>HSE</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>INP</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>MCHE</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>MOG</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>PROD</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>RHU</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>MNT</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>JUR</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>QLT</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>RT</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>D</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>SIG</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>TEC</h3>
+                                <div class="status-indicator not_implemented">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <p class="status-text">No Data Available</p>
+                            </div>
+                            <div class="status-actions">
+                                <button class="export-btn disabled">
+                                    <i class="fas fa-file-powerpoint"></i>
+                                    Export PPTX
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-summary">
+                    <h2>Summary</h2>
+                    <div class="summary-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-check"></i>
+                            <div class="stat-info">
+                                <h3>1</h3>
+                                <p>Departments with Data</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <i class="fas fa-times"></i>
+                            <div class="stat-info">
+                                <h3>16</h3>
+                                <p>Departments without Data</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <i class="fas fa-building"></i>
+                            <div class="stat-info">
+                                <h3>17</h3>
+                                <p>Total Departments</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+   
+</body>
+</html>

@@ -1,0 +1,86 @@
+Voici une solution claire et structurée pour créer ton rôle admin avec accès complet et une page admin centralisée.
+________________________________________
+✅ 1. Créer un rôle ADMIN dans ta base
+Si ce n’est pas déjà fait, ajoute un rôle ADMIN dans ta table des rôles :
+sql
+CopierModifier
+INSERT INTO MG_ROLE (ID_ROLE, NOM_ROLE)
+VALUES ('ADMIN', 'Administrateur');
+Et attribue-le à ton utilisateur admin dans ta table MGUSER ou gestion des utilisateurs.
+________________________________________
+✅ 2. Adapter ton check_rights
+Actuellement, tu utilises :
+python
+CopierModifier
+if not check_rights(id_role, id_ecran, action='SELECT'):
+    flash("⛔ Accès refusé", "error")
+    return redirect('/')
+🔧 Modifie la fonction check_rights pour retourner toujours True si id_role == 'ADMIN'.
+Exemple dans ton utils.py :
+python
+CopierModifier
+def check_rights(id_role, id_ecran, id_objet=None, action='SELECT'):
+    if id_role == 'ADMIN':
+        return True
+    # ... logique existante
+________________________________________
+✅ 3. Créer une page admin
+Dans ton blueprint admin (exemple admin.py) :
+python
+CopierModifier
+from flask import Blueprint, render_template, session, redirect, url_for
+ 
+admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+ 
+@admin_bp.route('/')
+def admin_home():
+    if 'id_role' not in session or session['id_role'] != 'ADMIN':
+        return redirect('/')
+ 
+    return render_template('admin_home.html')
+________________________________________
+✅ 4. Crée le template admin_home.html
+Voici un exemple complet et épuré :
+html
+CopierModifier
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+ 
+  <ul>
+    <li><a href="{{ url_for('inf.show_form') }}">INF Formulaire</a></li>
+    <li><a href="{{ url_for('inf.recap_global') }}">Récapitulatif Global</a></li>
+    <li><a href="{{ url_for('director.director_dashboard') }}">Director Dashboard</a></li>
+  </ul>
+ 
+  <p><a href="{{ url_for('logout') }}">Déconnexion</a></p>
+</body>
+</html>
+________________________________________
+🔧 5. Adapter tes routes existantes
+Pour tous tes contrôles d’accès (check_rights) :
+•	Pas besoin de modifier chaque route puisque la fonction check_rights renvoie toujours True si admin.
+________________________________________
+✅ 6. Résultat
+✔️ Ton utilisateur ADMIN peut accéder sans restriction à toutes les pages.
+✔️ Il dispose d’une page d’accueil admin pour naviguer rapidement vers :
+•	Formulaire INF
+•	Récapitulatif Global
+•	Director Dashboard
+________________________________________
+💡 7. Bonus : sécurité
+•	Vérifie bien que id_role est stocké en session après login.
+•	Ajoute un lien vers /admin visible uniquement si id_role == 'ADMIN'.
+Exemple dans ta navbar :
+html
+CopierModifier
+{% if session['id_role'] == 'ADMIN' %}
+  <a href="{{ url_for('admin.admin_home') }}">Admin</a>
+{% endif %}
+ 

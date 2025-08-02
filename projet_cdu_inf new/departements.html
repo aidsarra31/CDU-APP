@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments - Sonatrach Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6600;
+            --secondary-blue: #003366;
+            --light-orange: #FFF5F0;
+            --dark-orange: #B34700;
+            --background: #F5F7FA;
+            --surface: #FFFFFF;
+            --text-primary: #2D3748;
+            --text-secondary: #718096;
+            --border: #E2E8F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--background);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+            color: white;
+            padding: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            background: white;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            font-size: 1.5rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left-color: white;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background-color: var(--background);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            color: var(--primary-orange);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .department-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .department-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 102, 0, 0.15);
+        }
+
+        .dept-icon {
+            margin-bottom: 1rem;
+        }
+
+        .dept-icon i {
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+        }
+
+        .department-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .department-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .dept-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dept-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .departments-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-oil-well"></i>
+                </div>
+                <h2>Portal</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a class="active" onclick="navigateTo('departements.html')"><i class="fas fa-building"></i> Département</a></li>
+                <li><a onclick="navigateTo('settings.html')"><i class="fas fa-cog"></i> Paramètres</a></li>
+                <li><a onclick="navigateTo('security.html')"><i class="fas fa-lock"></i> Sécurité</a></li>
+                <li><a onclick="navigateTo('documents.html')"><i class="fas fa-file-alt"></i> Documents personnels</a></li>
+                <li><a onclick="navigateTo('history.html')"><i class="fas fa-history"></i> Historique d'activités</a></li>
+                <li><a onclick="navigateTo('director.html')"><i class="fas fa-tachometer-alt"></i> Director Dashboard</a></li>
+                <li><a onclick="navigateTo('login.html')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="departments">
+                <div class="page-header">
+                    <h1>Department Selection</h1>
+                    <p>Choose a department to access its management interface</p>
+                </div>
+                
+                <div class="departments-grid">
+                    <div class="department-card" onclick="navigateTo('inf-form.html')">
+                        <div class="dept-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>INF</h3>
+                        <p>Information Technology Department</p>
+                        <button class="dept-btn">Access INF</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('ADM')">
+                        <div class="dept-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h3>ADM</h3>
+                        <p>Administration Department</p>
+                        <button class="dept-btn">Access ADM</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('APP')">
+                        <div class="dept-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>APP</h3>
+                        <p>Applications Department</p>
+                        <button class="dept-btn">Access APP</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('FIN')">
+                        <div class="dept-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>FIN</h3>
+                        <p>Finance Department</p>
+                        <button class="dept-btn">Access FIN</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('HSE')">
+                        <div class="dept-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>HSE</h3>
+                        <p>Health, Safety & Environment</p>
+                        <button class="dept-btn">Access HSE</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('INP')">
+                        <div class="dept-icon">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <h3>INP</h3>
+                        <p>Industrial Projects</p>
+                        <button class="dept-btn">Access INP</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('MCHE')">
+                        <div class="dept-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>MCHE</h3>
+                        <p>Mechanical Engineering</p>
+                        <button class="dept-btn">Access MCHE</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('MOG')">
+                        <div class="dept-icon">
+                            <i class="fas fa-oil-well"></i>
+                        </div>
+                        <h3>MOG</h3>
+                        <p>Oil & Gas Operations</p>
+                        <button class="dept-btn">Access MOG</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('PROD')">
+                        <div class="dept-icon">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        <h3>PROD</h3>
+                        <p>Production Department</p>
+                        <button class="dept-btn">Access PROD</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('RHU')">
+                        <div class="dept-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>RHU</h3>
+                        <p>Human Resources</p>
+                        <button class="dept-btn">Access RHU</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('MNT')">
+                        <div class="dept-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3>MNT</h3>
+                        <p>Maintenance Department</p>
+                        <button class="dept-btn">Access MNT</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('JUR')">
+                        <div class="dept-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3>JUR</h3>
+                        <p>Legal Department</p>
+                        <button class="dept-btn">Access JUR</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('QLT')">
+                        <div class="dept-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h3>QLT</h3>
+                        <p>Quality Department</p>
+                        <button class="dept-btn">Access QLT</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('RT')">
+                        <div class="dept-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>RT</h3>
+                        <p>Research & Technology</p>
+                        <button class="dept-btn">Access RT</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('D')">
+                        <div class="dept-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>D</h3>
+                        <p>Direction Department</p>
+                        <button class="dept-btn">Access D</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('SIG')">
+                        <div class="dept-icon">
+                            <i class="fas fa-signal"></i>
+                        </div>
+                        <h3>SIG</h3>
+                        <p>Information Systems</p>
+                        <button class="dept-btn">Access SIG</button>
+                    </div>
+
+                    <div class="department-card" onclick="showComingSoon('TEC')">
+                        <div class="dept-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3>TEC</h3>
+                        <p>Technology Department</p>
+                        <button class="dept-btn">Access TEC</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        function showComingSoon(dept) {
+            alert(`Data entry form for ${dept} department is coming soon!`);
+        }
+    </script>
+</body>
+</html>

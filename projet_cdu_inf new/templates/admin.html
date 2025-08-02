@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Admin Interface</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Blue Theme Color Palette */
+            --primary-blue: #2563eb;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --dark-blue: #1e40af;
+            --accent-blue: #60a5fa;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            padding: 1rem;
+        }
+
+        .login-form {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(0);
+            transition: transform var(--transition-normal);
+        }
+
+        .login-form:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-blue);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #fef2f2;
+            border-radius: 4px;
+            border-left: 3px solid #dc2626;
+            display: none;
+        }
+
+        /* Admin Dashboard Styles */
+        .admin-container {
+            display: none;
+            min-height: 100vh;
+            background: var(--gray-50);
+        }
+
+        .admin-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--light-blue);
+            border-radius: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid var(--gray-300);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+            transition: all var(--transition-fast);
+        }
+
+        .logout-btn:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-blue);
+            padding: 0.5rem;
+        }
+
+        .admin-layout {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            transition: transform var(--transition-normal);
+        }
+
+        .sidebar-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            text-decoration: none;
+            color: var(--text-light);
+            border-radius: 8px;
+            transition: all var(--transition-fast);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .nav-link.active:hover {
+            background: var(--dark-blue);
+            transform: translateX(0);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            min-height: 600px;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .content-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .content-description {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .card-content {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .admin-layout {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 280px;
+                z-index: 1000;
+                transform: translateX(-100%);
+                border-radius: 0;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                display: none;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .content-title {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 0;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .admin-header {
+                padding: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Additional Enhancements */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            transform: translateX(400px);
+            transition: transform var(--transition-normal);
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #10b981;
+        }
+
+        .notification.error {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-content">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="header-title">Professional Admin Interface</h1>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <div class="user-avatar">A</div>
+                        <span>Administrator</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Layout -->
+        <div class="admin-layout">
+            <!-- Sidebar Navigation -->
+           <aside class="sidebar" id="sidebar">
+    <h2 class="sidebar-title">Navigation</h2>
+    <nav>
+        <ul class="nav-menu">
+            <!-- Dashboard Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('dashboard') }}" class="nav-link active" data-page="dashboard">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    </svg>
+                    Dashboard
+                </a>
+            </li>
+            <!-- Global Recap Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('recap_global') }}" class="nav-link" data-page="recap_global">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    Global Recap
+                </a>
+            </li>
+            <!-- Login Management Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('login_page') }}" class="nav-link" data-page="login_page">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Login Management
+                </a>
+            </li>
+            <!-- INF Data Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('inf_data') }}" class="nav-link" data-page="inf_data">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0h8v12H6V4z" clip-rule="evenodd"/>
+                        <path d="M8 6h4v2H8V6zm0 4h4v2H8v-2z"/>
+                    </svg>
+                    INF Data
+                </a>
+            </li>
+            <!-- Production Data Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('production') }}" class="nav-link" data-page="production">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 10-2 0v1a1 1 0 102 0v-1zm-4-1a1 1 0 011-1v3a1 1 0 11-2 0v-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Production Data
+                </a>
+            </li>
+            <!-- History Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('history') }}" class="nav-link" data-page="history">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                    </svg>
+                    History
+                </a>
+            </li>
+            <!-- Period Management Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('period_management') }}" class="nav-link" data-page="period_management">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    </svg>
+                    Period Management
+                </a>
+            </li>
+            <!-- Director Dashboard Link -->
+            <li class="nav-item">
+                <a href="{{ url_for('director_dashboard') }}" class="nav-link" data-page="director_dashboard">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        <path d="M6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                    </svg>
+                    Director Dashboard
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="page-content active">
+                    <div class="content-header">
+                        <h1 class="content-title">Admin Dashboard</h1>
+                        <p class="content-description">Welcome to the professional admin interface. Navigate through different sections using the sidebar menu.</p>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">📊</div>
+                                <h3 class="card-title">Quick Overview</h3>
+                            </div>
+                            <div class="card-content">
+                                <p>Access all administrative functions through the sidebar navigation. Each section provides dedicated tools for managing different aspects of the system.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">🔐</div>
+                                <h3 class="card-title">Security</h3>
+                            </div>
+                            <div class="card-content">
+                                <p>This interface includes role-based access control and secure authentication to ensure only authorized administrators can access sensitive data.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">📱</div>
+                                <h3 class="card-title">Responsive Design</h3>
+                            </div>
+                            <div class="card-content">
+                                <p>The interface is fully responsive and optimized for both desktop and mobile devices, ensuring accessibility across all platforms.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+                
+
+                
+                
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Application State
+        const AppState = {
+            isLoggedIn: false,
+            currentUser: null,
+            currentPage: 'dashboard'
+        };
+
+        // DOM Elements
+        const elements = {
+            loginScreen: document.getElementById('loginScreen'),
+            adminDashboard: document.getElementById('adminDashboard'),
+            loginForm: document.getElementById('loginForm'),
+            errorMessage: document.getElementById('errorMessage'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            menuToggle: document.getElementById('menuToggle'),
+            sidebar: document.getElementById('sidebar'),
+            sidebarOverlay: document.getElementById('sidebarOverlay'),
+            navLinks: document.querySelectorAll('.nav-link'),
+            pageContents: document.querySelectorAll('.page-content'),
+            notification: document.getElementById('notification')
+        };
+
+        // Authentication System
+        class AuthSystem {
+            static validateCredentials(username, password) {
+                // Demo credentials - replace with real authentication
+                const validCredentials = [
+                    { username: 'admin', password: 'admin123', role: 'administrator' },
+                    { username: 'director', password: 'director123', role: 'director' },
+                    { username: 'manager', password: 'manager123', role: 'manager' }
+                ];
+
+                return validCredentials.find(cred => 
+                    cred.username === username && cred.password === password
+                );
+            }
+
+            static login(username, password) {
+                const user = this.validateCredentials(username, password);
+                
+                if (user) {
+                    AppState.isLoggedIn = true;
+                    AppState.currentUser = user;
+                    localStorage.setItem('adminUser', JSON.stringify(user));
+                    return { success: true, user };
+                }
+                
+                return { success: false, message: 'Invalid username or password' };
+            }
+
+            static logout() {
+                AppState.isLoggedIn = false;
+                AppState.currentUser = null;
+                localStorage.removeItem('adminUser');
+                UI.showLoginScreen();
+                NotificationSystem.show('Logged out successfully', 'success');
+            }
+
+            static checkStoredAuth() {
+                const storedUser = localStorage.getItem('adminUser');
+                if (storedUser) {
+                    try {
+                        const user = JSON.parse(storedUser);
+                        AppState.isLoggedIn = true;
+                        AppState.currentUser = user;
+                        return true;
+                    } catch (e) {
+                        localStorage.removeItem('adminUser');
+                        return false;
+                    }
+                }
+                return false;
+            }
+        }
+
+        // UI Management System
+        class UI {
+            static showLoginScreen() {
+                elements.loginScreen.style.display = 'flex';
+                elements.adminDashboard.style.display = 'none';
+                elements.loginForm.reset();
+                elements.errorMessage.style.display = 'none';
+            }
+
+            static showAdminDashboard() {
+                elements.loginScreen.style.display = 'none';
+                elements.adminDashboard.style.display = 'block';
+                this.updateUserInfo();
+                this.showPage('dashboard');
+            }
+
+            static updateUserInfo() {
+                if (AppState.currentUser) {
+                    const userAvatar = document.querySelector('.user-avatar');
+                    const userSpan = document.querySelector('.user-info span');
+                    
+                    if (userAvatar && userSpan) {
+                        userAvatar.textContent = AppState.currentUser.username.charAt(0).toUpperCase();
+                        userSpan.textContent = AppState.currentUser.role.charAt(0).toUpperCase() + 
+                                               AppState.currentUser.role.slice(1);
+                    }
+                }
+            }
+
+            static showPage(pageId) {
+                // Hide all pages
+                elements.pageContents.forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                // Show selected page
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+
+                // Update navigation
+                elements.navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+
+                AppState.currentPage = pageId;
+                
+                // Close mobile menu if open
+                this.closeMobileMenu();
+            }
+
+            static showError(message) {
+                elements.errorMessage.textContent = message;
+                elements.errorMessage.style.display = 'block';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    elements.errorMessage.style.display = 'none';
+                }, 5000);
+            }
+
+            static toggleMobileMenu() {
+                elements.sidebar.classList.toggle('mobile-open');
+                elements.sidebarOverlay.classList.toggle('active');
+            }
+
+            static closeMobileMenu() {
+                elements.sidebar.classList.remove('mobile-open');
+                elements.sidebarOverlay.classList.remove('active');
+            }
+        }
+
+        // Notification System
+        class NotificationSystem {
+            static show(message, type = 'info', duration = 3000) {
+                elements.notification.textContent = message;
+                elements.notification.className = `notification ${type}`;
+                elements.notification.classList.add('show');
+
+                setTimeout(() => {
+                    elements.notification.classList.remove('show');
+                }, duration);
+            }
+        }
+
+        // Form Validation
+        class FormValidator {
+            static validateLoginForm(formData) {
+                const errors = [];
+
+                if (!formData.username || formData.username.trim().length < 3) {
+                    errors.push('Username must be at least 3 characters long');
+                }
+
+                if (!formData.password || formData.password.length < 6) {
+                    errors.push('Password must be at least 6 characters long');
+                }
+
+                return {
+                    isValid: errors.length === 0,
+                    errors
+                };
+            }
+        }
+
+        // Event Handlers
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(elements.loginForm);
+            const loginData = {
+                username: formData.get('username').trim(),
+                password: formData.get('password')
+            };
+
+            // Validate form
+            const validation = FormValidator.validateLoginForm(loginData);
+            if (!validation.isValid) {
+                UI.showError(validation.errors.join('. '));
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = elements.loginForm.querySelector('.btn-primary');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Signing in...';
+            submitBtn.disabled = true;
+
+            // Simulate network delay for better UX
+            setTimeout(() => {
+                const result = AuthSystem.login(loginData.username, loginData.password);
+                
+                if (result.success) {
+                    UI.showAdminDashboard();
+                    NotificationSystem.show('Welcome back, ' + result.user.username + '!', 'success');
+                } else {
+                    UI.showError(result.message);
+                }
+
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 800);
+        }
+
+        function handleNavigation(event) {
+            event.preventDefault();
+            
+            const link = event.target.closest('.nav-link');
+            if (link && link.dataset.page) {
+                const pageId = link.dataset.page;
+                UI.showPage(pageId);
+                
+                // Add smooth scroll effect for mobile
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 100);
+                }
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                AuthSystem.logout();
+            }
+        }
+
+        function handleMobileMenu() {
+            UI.toggleMobileMenu();
+        }
+
+        function handleSidebarOverlay() {
+            UI.closeMobileMenu();
+        }
+
+        // Keyboard Navigation
+        function handleKeyboardNavigation(event) {
+            // ESC key to close mobile menu
+            if (event.key === 'Escape') {
+                UI.closeMobileMenu();
+            }
+
+            // Enter key on navigation links
+            if (event.key === 'Enter' && event.target.classList.contains('nav-link')) {
+                event.target.click();
+            }
+        }
+
+        // Window Resize Handler
+        function handleWindowResize() {
+            if (window.innerWidth > 768) {
+                UI.closeMobileMenu();
+            }
+        }
+
+        // Initialize Application
+        function initializeApp() {
+            // Check for stored authentication
+            if (AuthSystem.checkStoredAuth()) {
+                UI.showAdminDashboard();
+                NotificationSystem.show('Welcome back!', 'success');
+            } else {
+                UI.showLoginScreen();
+            }
+
+            // Bind event listeners
+            elements.loginForm.addEventListener('submit', handleLogin);
+            elements.logoutBtn.addEventListener('click', handleLogout);
+            elements.menuToggle.addEventListener('click', handleMobileMenu);
+            elements.sidebarOverlay.addEventListener('click', handleSidebarOverlay);
+            
+            // Navigation event delegation
+            elements.sidebar.addEventListener('click', handleNavigation);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeyboardNavigation);
+            
+            // Window resize
+            window.addEventListener('resize', handleWindowResize);
+
+            // Form input focus effects
+            const formInputs = document.querySelectorAll('.form-input');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', () => {
+                    input.parentElement.classList.remove('focused');
+                });
+            });
+
+            // Add loading animation to navigation links
+            elements.navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    link.style.opacity = '0.6';
+                    setTimeout(() => {
+                        link.style.opacity = '1';
+                    }, 200);
+                });
+            });
+
+            console.log('Professional Admin Interface initialized successfully');
+        }
+
+        // Start the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+        // Progressive Web App Support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Service worker registration would go here for PWA support
+            });
+        }
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            const loadTime = performance.now();
+            console.log(`Admin interface loaded in ${Math.round(loadTime)}ms`);
+        });
+    </script>
+</body>
+</html>
+

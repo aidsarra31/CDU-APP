@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CDU Application - INF</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      background-color: #003366;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    header img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      font-size: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - 100px);
+      padding: 20px;
+    }
+
+    .left-pane {
+      width: 40%;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 2px 2px 5px #ccc;
+      margin-right: 10px;
+      overflow-y: auto;
+    }
+
+    .right-pane {
+      flex: 1;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 2px 2px 5px #ccc;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      text-align: left;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 150px;
+    }
+
+    button:hover {
+      background-color: #005588;
+    }
+
+    .bottom-menu {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      background-color: #003366;
+      color: white;
+    }
+
+    .bottom-menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .profile {
+      position: relative;
+      margin-left: auto;
+      cursor: pointer;
+    }
+
+    .profile-popup {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: white;
+      color: black;
+      padding: 10px;
+      box-shadow: 0 0 10px #aaa;
+      border-radius: 4px;
+      z-index: 100;
+    }
+
+    .profile-popup button {
+      background-color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="Sonatrach Logo">
+    <h1>CDU Application</h1>
+    <div class="profile" onclick="toggleProfile()">
+      👤 Profil
+      <div id="profilePopup" class="profile-popup">
+        <p><strong>User ID:</strong> user123</p>
+        <button onclick="logout()">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="left-pane">
+      <h3>Structures et Valeurs</h3>
+      <table>
+        <thead>
+          <tr><th>Structure</th><th>Valeur</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>INF_BDD</td><td><input type="text" value="Base de données"></td></tr>
+          <tr><td>INF_SUPPORT</td><td><input type="text" value="Support technique"></td></tr>
+          <tr><td>INF_RESEAUX</td><td><input type="text" value="Réseaux"></td></tr>
+          <tr><td>TELECOME</td><td><input type="text" value="Télécoms"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="right-pane">
+      <div>
+        <h3>Saisie des informations</h3>
+        <label>Type d'intervention</label>
+        <input type="text" placeholder="Type d'intervention...">
+        <label>Observation</label>
+        <input type="text" placeholder="Observations...">
+        <label>Période</label>
+        <input type="text" placeholder="Période...">
+      </div>
+      <div style="text-align: right;">
+        <button onclick="saveData()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-menu">
+    <a href="recap_user.html">📄 Recap Utilisateur</a>
+    <a href="recap_global.html">🌍 Recap Global</a>
+  </div>
+
+  <script>
+    function toggleProfile() {
+      const popup = document.getElementById("profilePopup");
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
+    function logout() {
+      alert("Déconnexion...");
+      // You can add redirection or session cleanup here
+    }
+
+    function saveData() {
+      alert("Données enregistrées !");
+      // Add form handling or POST request here
+    }
+  </script>
+
+</body>
+</html>

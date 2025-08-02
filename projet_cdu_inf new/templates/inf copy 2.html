@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remplissage CDU INF - Sonatrach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+
+        .right-badge {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+    }
+    .editable { border-left: 3px solid #28a745; }
+    .read-only { border-left: 3px solid #6c757d; }
+
+        /* Sonatrach Theme Variables */
+        :root {
+            --sonatrach-orange: #FF6B35;
+            --sonatrach-dark-orange: #E55A2B;
+            --sonatrach-light-orange: #FF8B65;
+            --sonatrach-accent: #FF9F80;
+            --text-dark: #2C3E50;
+            --text-light: #6C757D;
+            --success-green: #28A745;
+            --warning-amber: #FFC107;
+            --light-bg: #FFF8F5;
+            --card-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .sonatrach-header {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sonatrach-orange);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .header-text h1 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-text p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #E9ECEF;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--sonatrach-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Table Styling */
+        .data-table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-top: 1.5rem;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-row-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-row-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .dynamic-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .dynamic-table thead th {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+
+        .dynamic-table tbody tr {
+            border-bottom: 1px solid #F0F0F0;
+            transition: all 0.3s ease;
+        }
+
+        .dynamic-table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.03) 0%, rgba(255, 139, 101, 0.02) 100%);
+        }
+
+        .dynamic-table tbody td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+        }
+
+        .table-input {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 2px solid #E9ECEF;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .table-input:focus {
+            outline: none;
+            border-color: var(--sonatrach-orange);
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+        }
+
+        .structure-cell {
+            font-weight: 600;
+            color: var(--text-dark);
+            background: #F8F9FA;
+            text-align: center;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #F8F9FA;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sonatrach-orange) 0%, var(--sonatrach-dark-orange) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6C757D;
+            color: white;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #5A6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 500;
+        }
+
+        .message-success {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
+            border: 2px solid rgba(40, 167, 69, 0.2);
+            color: #155724;
+        }
+
+        .message-error {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+            border: 2px solid rgba(220, 53, 69, 0.2);
+            color: #721C24;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .header-text h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-body {
+                padding: 1.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .dynamic-table thead th,
+            .dynamic-table tbody td {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .row-appear {
+            animation: rowAppear 0.3s ease forwards;
+        }
+
+        #iduser {
+            text-transform: uppercase;
+        }
+.flash-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.custom-flash {
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 auto;
+    animation: fadeInOut 5s ease-in-out forwards;
+}
+
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+        @keyframes rowAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+   
+
+   {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        {% if message.strip() %}
+          <div class="custom-flash {{ 'flash-success' if category == 'success' else 'flash-error' }}">
+            <i class="fas {{ 'fa-check-circle' if category == 'success' else 'fa-exclamation-triangle' }}"></i>
+            {{ message }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<p>Bienvenue {{ session.username }}</p>
+
+    <form action="/submit-inf" method="POST">
+        <!-- Header -->
+        <div class="sonatrach-header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div class="header-text">
+                        <h1>SONATRACH</h1>
+                        <p>Système CDU - Remplissage INF</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Flash Messages -->
+           
+                        <div class="message message-{{ 'success' if category == 'success' else 'error' }}">
+                            <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                    
+                        </div>
+              
+
+            <!-- Form Container -->
+            <div class="form-container fade-in">
+                <div class="form-header">
+                    <div class="form-title">
+                        <i class="fas fa-table"></i>
+                  
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+
+                <div class="form-body">
+                    <!-- Type d'intervention -->
+                    <div class="form-group">
+                        <label for="type_intervention" class="form-label">
+                            <i class="fas fa-cog"></i> Type d'intervention
+                        </label>
+                        <select class="form-control" id="type_intervention" name="type_intervention" required>
+                            <option value="" disabled selected>Sélectionnez un type...</option>
+                            <option value="Support">Support</option>
+                            <option value="Telecom">Telecom</option>
+                            <option value="BDD">BDD</option>
+                            <option value="Network">Network</option>
+                        </select>
+                    </div>
+
+                    <!-- ID Utilisateur -->
+                    <div class="form-group">
+                        <label for="iduser" class="form-label">
+                            <i class="fas fa-user"></i> ID Utilisateur
+                        </label>
+                        <input type="text" 
+                            class="form-control" 
+                            id="iduser" 
+                            name="iduser" 
+                            placeholder="Votre identifiant utilisateur" 
+                            required>
+                    </div>
+
+                    <!-- Observation -->
+                    <div class="form-group">
+                        <label for="observ" class="form-label">
+                            <i class="fas fa-comment"></i> Observation
+                            {% if can_edit_obs %}
+                                <span class="right-badge bg-success">MODIFIABLE</span>
+                            {% else %}
+                                <span class="right-badge bg-secondary">LECTURE SEULE</span>
+                            {% endif %}
+                        </label>
+                        <textarea class="form-control {{ 'editable' if can_edit_obs else 'read-only' }}" 
+                                id="observ" 
+                                name="observ" 
+                                rows="3"
+                                {% if not can_edit_obs %}readonly{% endif %}></textarea>
+                    </div>
+
+                     <!-- Fixed Structures Table -->
+                    <div class="data-table-container">
+                        <div class="table-header">
+                            <div class="table-title">
+                                <i class="fas fa-list"></i>
+                                Structures et Interventions
+                            </div>
+                        </div>
+
+                        <table class="dynamic-table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-building"></i> Structure</th>
+                                    <th><i class="fas fa-hashtag"></i> Nombre d'interventions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <tr>
+                                    <td class="structure-cell">ADM</td>
+                                    <td><input type="number" class="table-input" name="structure_ADM" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">APP</td>
+                                    <td><input type="number" class="table-input" name="structure_APP" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">D</td>
+                                    <td><input type="number" class="table-input" name="structure_D" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">EXP</td>
+                                    <td><input type="number" class="table-input" name="structure_EXP" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">GPR</td>
+                                    <td><input type="number" class="table-input" name="structure_GPR" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">RHU</td>
+                                    <td><input type="number" class="table-input" name="structure_RHU" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">FIN</td>
+                                    <td><input type="number" class="table-input" name="structure_FIN" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">MNT</td>
+                                    <td><input type="number" class="table-input" name="structure_MNT" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">HSE</td>
+                                    <td><input type="number" class="table-input" name="structure_HSE" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">INP</td>
+                                    <td><input type="number" class="table-input" name="structure_INP" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">JUR</td>
+                                    <td><input type="number" class="table-input" name="structure_JUR" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">MOG</td>
+                                    <td><input type="number" class="table-input" name="structure_MOG" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">PROD</td>
+                                    <td><input type="number" class="table-input" name="structure_PROD" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">RT</td>
+                                    <td><input type="number" class="table-input" name="structure_RT" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">SIE</td>
+                                    <td><input type="number" class="table-input" name="structure_SIE" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">SIG</td>
+                                    <td><input type="number" class="table-input" name="structure_SIG" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">TEC</td>
+                                    <td><input type="number" class="table-input" name="structure_TEC" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">TNF</td>
+                                    <td><input type="number" class="table-input" name="structure_TNF" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="structure-cell">MCHE</td>
+                                    <td><input type="number" class="table-input" name="structure_MCHE" value="0" min="0" placeholder="0"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Enregistrer
+                        </button>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                }, index * 200);
+            });
+        });
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const typeIntervention = document.getElementById('type_intervention').value.trim();
+            const idUser = document.getElementById('iduser').value.trim();
+            
+            // Validate intervention type
+            if (!typeIntervention) {
+                e.preventDefault();
+                alert('Veuillez sélectionner le type d\'intervention.');
+                document.getElementById('type_intervention').focus();
+                return;
+            }
+            
+            // Validate user ID
+            if (!idUser) {
+                e.preventDefault();
+                alert('Veuillez saisir votre identifiant utilisateur.');
+                document.getElementById('iduser').focus();
+                return;
+            }
+
+            // Check if at least one structure has a value greater than 0
+            const structureInputs = document.querySelectorAll('input[name^="structure_"]');
+            let hasValues = false;
+            
+            structureInputs.forEach(input => {
+                if (parseInt(input.value) > 0) {
+                    hasValues = true;
+                }
+            });
+            
+            if (!hasValues) {
+                e.preventDefault();
+                alert('Veuillez saisir au moins une valeur supérieure à 0 pour une structure.');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-primary');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+            submitBtn.disabled = true;
+            
+            // Re-enable after a short delay in case of validation errors
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+
+        // Enhanced input interactions
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('table-input')) {
+                // Add visual feedback for valid inputs
+                if (parseInt(e.target.value) > 0) {
+                    e.target.style.borderColor = '#28A745';
+                } else {
+                    e.target.style.borderColor = '#E9ECEF';
+                }
+            }
+            
+            // Clear error state when user types in iduser field
+            if (e.target.id === 'iduser') {
+                e.target.style.borderColor = e.target.value.trim() ? '#28A745' : '#E9ECEF';
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Enter to submit form
+            if (e.ctrlKey && e.key === 'Enter') {
+                document.querySelector('form').submit();
+            }
+        });
+    </script>
+</body>
+</html>

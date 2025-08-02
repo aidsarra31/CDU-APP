@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNT Department - Sonatrach Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="mnt-styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-oil-well"></i>
+                </div>
+                <h2>Portal</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a onclick="navigateTo('departments.html')"><i class="fas fa-building"></i> Département</a></li>
+                <li><a onclick="navigateTo('settings.html')"><i class="fas fa-cog"></i> Paramètres</a></li>
+                <li><a onclick="navigateTo('security.html')"><i class="fas fa-lock"></i> Sécurité</a></li>
+                <li><a onclick="navigateTo('documents.html')"><i class="fas fa-file-alt"></i> Documents personnels</a></li>
+                <li><a onclick="navigateTo('history.html')"><i class="fas fa-history"></i> Historique d'activités</a></li>
+                <li><a onclick="navigateTo('director-dashboard.html')"><i class="fas fa-tachometer-alt"></i> Director Dashboard</a></li>
+                <li><a onclick="navigateTo('login.html')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>MNT Department</h1>
+                <p>Maintenance - Asset Management & Operations</p>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                <span id="successText">Data saved successfully!</span>
+            </div>
+
+            <!-- MNT Installation Table -->
+            <div class="table-container">
+                <h2 class="section-title">Maintenance Installation Status</h2>
+                
+                <div class="table-wrapper">
+                    <table class="installation-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Train</th>
+                                <th rowspan="2">Situation</th>
+                                <th rowspan="2">Jours d'arrêt</th>
+                                <th rowspan="2" class="mnt-editable">Jours d'arrêt TDD</th>
+                                <th rowspan="2" class="mnt-editable">Nombre de Déclenchements</th>
+                                <th colspan="5">Situation</th>
+                            </tr>
+                            <tr>
+                                <th class="situation-col mnt-editable">TDD: X%</th>
+                                <th class="situation-col">TP: X%</th>
+                                <th class="situation-col">AC: X%</th>
+                                <th class="situation-col">GT: X%</th>
+                                <th class="situation-col mnt-editable">Observations MNT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="installation-table-body">
+                            <!-- Table rows will be dynamically generated -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-actions">
+                    <button type="button" class="submit-btn" onclick="addInstallationRow()">
+                        <i class="fas fa-plus"></i>
+                        Add Row
+                    </button>
+                    <button type="button" class="submit-btn" onclick="saveInstallationData()">
+                        <i class="fas fa-save"></i>
+                        Save Data
+                    </button>
+                    <button type="button" class="cancel-btn" onclick="clearInstallationTable()">
+                        <i class="fas fa-trash"></i>
+                        Clear Table
+                    </button>
+                    <button type="button" class="submit-btn secondary" onclick="exportInstallationData()">
+                        <i class="fas fa-download"></i>
+                        Export CSV
+                    </button>
+                    <button type="button" class="back-btn" onclick="navigateTo('departments.html')">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Departments
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="mnt-script.js"></script>
+</body>
+</html>
